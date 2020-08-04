@@ -1,3 +1,6 @@
+
+;basically jsut for a warm up, done in parts, from here https://www.briansteffens.com/introduction-to-64-bit-assembly/01-hello-world/
+
 section .data	; data section
 
     message db "Hello, world!", 10	; the hello world string and a LF char
@@ -12,3 +15,7 @@ _start:
     mov rsi, message	; mem location of buffer to print 
     mov rdx, [messageLen]		; moves size in bytes of strign to print to rdx 
     syscall			; does call ( x64 uses syscal isntead of the old interupt on 0x80) 
+
+	mov rax, 60	; sys_exit to exit program
+    mov rdi, 0	;with exit call 0
+    syscall
