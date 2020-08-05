@@ -45,30 +45,58 @@
     41                                  
     42                                  global _start
     43                                  _start:
-    44                                      ;ok, why on earth does this first print not show up? 
-    45 00000013 48BF-                       mov rdi, message
-    45 00000015 [0000000000000000] 
-    46 0000001D 488B3425[0E000000]          mov rsi, [messageLen]
-    47 00000025 E8D6FFFFFF                  call print
-    48                                  
-    49 0000002A 48BF-                       mov rdi, testmessage
-    49 0000002C [1000000000000000] 
-    50 00000034 488B3425[15000000]          mov rsi, [testmessageLen]
-    51 0000003C E8BFFFFFFF                  call print
-    52                                  
-    53                                      ;actual sorting
-    54                                  
-    55                                  
-    56                                  
-    57                                  
-    58 00000041 48BF-                       mov rdi, toSort
-    58 00000043 [1700000000000000] 
-    59 0000004B 488B3425[39000000]          mov rsi, [toSortLen]
-    60 00000053 E8A8FFFFFF                  call print
-    61                                  
-    62                                  
-    63                                      			 
-    64                                  end:
-    65 00000058 B83C000000              	mov rax, sys_exit	
-    66 0000005D BF00000000                  mov rdi, success_exit	
-    67 00000062 0F05                        syscall
+    44                                      ;ok, why on earth does this first print or the second not show up? 
+    45                                      ;maybe has to do with output bufffering, and i keep writing over it?
+    46 00000013 48BF-                       mov rdi, message
+    46 00000015 [0000000000000000] 
+    47 0000001D 488B3425[0E000000]          mov rsi, [messageLen]
+    48 00000025 E8D6FFFFFF                  call print
+    49                                  
+    50                                      
+    51                                  
+    52                                      ;actual sorting
+    53                                  
+    54                                      ;init
+    55 0000002A 48B8-                       mov rax, toSort ;pointer to start of array
+    55 0000002C [1700000000000000] 
+    56 00000034 488B0C25[39000000]          mov rcx, [toSortLen] ; lenght of the array into outer loop couter
+    57 0000003C 488B1425[39000000]          mov rdx, [toSortLen] ; lenght of the array into inner loop couter
+    58                                      ;mov rdi, 0 ; swap flag 
+    59                                  
+    60                                  innerloop:
+    61 00000044 668B18                      mov bx,[rax] ;load using pointer
+    62 00000047 668B7001                    mov si,[rax+1] ;load using pointer +1
+    63 0000004B 6639F3                      cmp bx,si  ;compare them
+    64 0000004E 7D07                        jge dontswap; if greater then other, then we dont swap them 
+    65                                      ;but other wise go ahead with swap
+    66                                      ;xchg bx,si
+    67 00000050 66895801                    mov [rax+1],bx 
+    68 00000054 668930                      mov [rax], si 
+    69                                  
+    70                                  dontswap:
+    71 00000057 48FFC0                      inc rax
+    72 0000005A 48FFCA                      dec rdx  ; decrement inner counter
+    73 0000005D 75E5                        jnz innerloop ; do inner loop iteration again 
+    74 0000005F 48FFC9                      dec rcx ;decrement outer loop
+    75 00000062 740F                        jz _end ; go to end if we are done sorting other wise outer loop makes it go again
+    76 00000064 4889CA                      mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
+    77 00000067 48B8-                       mov rax, toSort;reset pointer 
+    77 00000069 [1700000000000000] 
+    78 00000071 EBD1                        jmp innerloop
+    79                                  
+    80                                  
+    81                                  ;go back to the start 
+    82                                  
+    83                                  _end:
+    84 00000073 48BF-                       mov rdi, toSort
+    84 00000075 [1700000000000000] 
+    85 0000007D 488B3425[39000000]          mov rsi, [toSortLen]
+    86 00000085 E876FFFFFF                  call print
+    87                                  
+    88                                  
+    89                                  
+    90                                      			 
+    91                                  end:
+    92 0000008A B83C000000              	mov rax, sys_exit	
+    93 0000008F BF00000000                  mov rdi, success_exit	
+    94 00000094 0F05                        syscall
