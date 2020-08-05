@@ -1,29 +1,29 @@
-;define handy macros 
-%define sys_write 1
-%define stdout 1
+#define handy macros 
+#define sys_write 1
+#define stdout 1
 
-%define sys_exit 60
-%define success 0
+#define sys_exit 60
+#define success 0
 
-%define nl 10
+#define nl 10
 
 
 
-section .data	
+.data	
     introMessage db "string to bubblesort ",nl
     introMessageLen dw $-introMessage
 
-    message db "aiuhwgralpiuerhjgopaidfugaopiger",nl	; does nasm not have an escape char stop  from being a comment??
+    message db "aiuhwgralpiuerhjgopaidfugaopiger",nl	# does nasm not have an escape char stop  from being a comment??
 	messageLen dw $-message
 
-section .text	 
+.text	 
 
 
-global _start	
+.global start	
 _start:			
-    mov rax, sys_write 	 
-    mov rdi, stdout	
-    mov rsi, introMessage	
+    mov sys_write, rax  	 
+    mov stdout,rdi 	
+    mov introMessage, rsi	
     mov rdx, [introMessageLen]		 
     syscall		
 
