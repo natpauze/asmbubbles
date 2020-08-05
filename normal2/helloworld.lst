@@ -1,0 +1,38 @@
+     1                                  
+     2                                  ;basically jsut for a warm up, done in parts, from here https://www.briansteffens.com/introduction-to-64-bit-assembly/01-hello-world/
+     3                                  
+     4                                  ;define handy macros 
+     5                                  %define sys_write 1
+     6                                  %define stdout 1
+     7                                  
+     8                                  %define sys_exit 60
+     9                                  %define success 0
+    10                                  
+    11                                  %define nl 10
+    12                                  
+    13                                  
+    14                                  
+    15                                  section .data	; data section
+    16                                  
+    17 00000000 48656C6C6F2C20776F-         message db "Hello, world!", nl	; the hello world string and a LF char
+    17 00000009 726C64210A         
+    18                                  	;messageLen db 14
+    19 0000000E 0E                      	messageLen db $-message
+    20                                  
+    21                                  section .text	 ; test section
+    22                                  
+    23                                  ;global main	; gcc requires main as a start point
+    24                                  ;main:
+    25                                  global _start
+    26                                  _start:
+    27                                  
+    28 00000000 B801000000                  mov rax, sys_write 	; syscall to make, 1 is sys write 
+    29 00000005 BF01000000                  mov rdi, stdout	; file to print to, 1 is STDOUT
+    30 0000000A 48BE-                       mov rsi, message	; mem location of buffer to print 
+    30 0000000C [0000000000000000] 
+    31 00000014 488B1425[0E000000]          mov rdx, [messageLen]		; moves size in bytes of strign to print to rdx 
+    32 0000001C 0F05                        syscall			; does call ( x64 uses syscal isntead of the old interupt on 0x80) 
+    33                                  
+    34 0000001E B83C000000              	mov rax, sys_exit	; sys_exit to exit program
+    35 00000023 BF00000000                  mov rdi, success	;with exit call 0
+    36 00000028 0F05                        syscall

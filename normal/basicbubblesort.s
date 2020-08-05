@@ -13,7 +13,7 @@
     introMessage:
      .asciz "string to bubblesort "
     introMessageLen:
-        .int $-introMessage
+        .int 14
 
    # message db "aiuhwgralpiuerhjgopaidfugaopiger",nl	# does nasm not have an escape char stop  from being a comment??
    # 	messageLen dw $-message
@@ -23,13 +23,14 @@
 
 .globl _start	
 _start:		
-    mov sys_write, rax  	 
-    mov stdout,rdi 	
-    mov introMessage, rsi	
-    mov rdx, [introMessageLen]		 
+    mov $sys_write, %rax  	 
+    mov $stdout,%rdi 	
+    mov introMessage, %rsi	
+    mov introMessageLen, %rdx		 
     syscall		
 
-    ;exit cleanly 
-	mov rax, sys_exit    	
-    mov rdi, success	
+    # exit cleanly 
+	mov sys_exit, %rax   	
+    mov success, %rdi 	
     syscall
+
