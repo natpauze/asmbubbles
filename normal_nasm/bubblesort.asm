@@ -14,13 +14,9 @@
 
 section .data
 
-    message db "Hello, world!", nl
+    message db "String to bubblesort", nl
 	;messageLen dw $-message
-    messageLen dq 14
-
-    testmessage db "test", nl
-	;messageLen dw $-message
-    testmessageLen dq 5
+    messageLen dq $-message
 
     toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
 	;toSortLen dw $-toSort
@@ -29,7 +25,7 @@ section .data
 section .text	 
 
 
-; Printing function jsut for fun, pass pointer in rdi and len in rsi
+; Printing function pass pointer in rdi and len in rsi
 print:
     mov rdx, rsi
     mov rsi, rdi 
@@ -41,13 +37,14 @@ ret
 
 global _start
 _start:
-    ;ok, why on earth does this first print or the second not show up? 
-    ;maybe has to do with output bufffering, and i keep writing over it?
+
     mov rdi, message
     mov rsi, [messageLen]
     call print
-
     
+    mov rdi, toSort
+    mov rsi, [toSortLen]
+    call print
 
     ;actual sorting
 

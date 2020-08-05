@@ -14,89 +14,88 @@
     14                                  
     15                                  section .data
     16                                  
-    17 00000000 48656C6C6F2C20776F-         message db "Hello, world!", nl
-    17 00000009 726C64210A         
+    17 00000000 537472696E6720746F-         message db "String to bubblesort", nl
+    17 00000009 20627562626C65736F-
+    17 00000012 72740A             
     18                                  	;messageLen dw $-message
-    19 0000000E 0E00000000000000            messageLen dq 14
+    19 00000015 1500000000000000            messageLen dq $-message
     20                                  
-    21 00000016 746573740A                  testmessage db "test", nl
-    22                                  	;messageLen dw $-message
-    23 0000001B 0500000000000000            testmessageLen dq 5
+    21 0000001D 61697568776772616C-         toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
+    21 00000026 7069756572686A676F-
+    21 0000002F 3B7061696466756761-
+    21 00000038 6F70696765720A     
+    22                                  	;toSortLen dw $-toSort
+    23 0000003F 2200000000000000            toSortLen dq 34
     24                                  
-    25 00000023 61697568776772616C-         toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
-    25 0000002C 7069756572686A676F-
-    25 00000035 3B7061696466756761-
-    25 0000003E 6F70696765720A     
-    26                                  	;toSortLen dw $-toSort
-    27 00000045 2200000000000000            toSortLen dq 34
-    28                                  
-    29                                  section .text	 
-    30                                  
-    31                                  
-    32                                  ; Printing function jsut for fun, pass pointer in rdi and len in rsi
-    33                                  print:
-    34 00000000 4889F2                      mov rdx, rsi
-    35 00000003 4889FE                      mov rsi, rdi 
-    36 00000006 B801000000                  mov rax, sys_write	 
-    37 0000000B BF01000000                  mov rdi, stdout		
-    38 00000010 0F05                        syscall
-    39 00000012 C3                      ret
+    25                                  section .text	 
+    26                                  
+    27                                  
+    28                                  ; Printing function jsut for fun, pass pointer in rdi and len in rsi
+    29                                  print:
+    30 00000000 4889F2                      mov rdx, rsi
+    31 00000003 4889FE                      mov rsi, rdi 
+    32 00000006 B801000000                  mov rax, sys_write	 
+    33 0000000B BF01000000                  mov rdi, stdout		
+    34 00000010 0F05                        syscall
+    35 00000012 C3                      ret
+    36                                  
+    37                                  
+    38                                  global _start
+    39                                  _start:
     40                                  
-    41                                  
-    42                                  global _start
-    43                                  _start:
-    44                                      ;ok, why on earth does this first print or the second not show up? 
-    45                                      ;maybe has to do with output bufffering, and i keep writing over it?
-    46 00000013 48BF-                       mov rdi, message
-    46 00000015 [0000000000000000] 
-    47 0000001D 488B3425[0E000000]          mov rsi, [messageLen]
-    48 00000025 E8D6FFFFFF                  call print
-    49                                  
-    50                                      
-    51                                  
-    52                                      ;actual sorting
-    53                                  
-    54                                      ;init
-    55 0000002A 48B8-                       mov rax, toSort ;pointer to start of array
-    55 0000002C [2300000000000000] 
-    56 00000034 488B0C25[45000000]          mov rcx, [toSortLen] ; lenght of the array into outer loop couter
-    57 0000003C 488B1425[45000000]          mov rdx, [toSortLen] ; lenght of the array into inner loop couter
-    58                                      ;mov rdi, 0 ; swap flag 
-    59                                  
-    60                                  innerloop:
-    61 00000044 668B18                      mov bx,[rax] ;load using pointer
-    62 00000047 668B7001                    mov si,[rax+1] ;load using pointer +1
-    63 0000004B 6639F3                      cmp bx,si  ;compare them
-    64 0000004E 7D07                        jge dontswap; if greater then other, then we dont swap them 
-    65                                      ;but other wise go ahead with swap
-    66                                      ;xchg bx,si
-    67 00000050 66895801                    mov [rax+1],bx 
-    68 00000054 668930                      mov [rax], si 
-    69                                  
-    70                                  dontswap:
-    71 00000057 48FFC0                      inc rax
-    72 0000005A 48FFCA                      dec rdx  ; decrement inner counter
-    73 0000005D 75E5                        jnz innerloop ; do inner loop iteration again 
-    74 0000005F 48FFC9                      dec rcx ;decrement outer loop
-    75 00000062 740F                        jz _end ; go to end if we are done sorting other wise outer loop logic below makes it go again
-    76 00000064 4889CA                      mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
-    77 00000067 48B8-                       mov rax, toSort;reset pointer to start of array
-    77 00000069 [2300000000000000] 
-    78 00000071 EBD1                        jmp innerloop
+    41 00000013 48BF-                       mov rdi, message
+    41 00000015 [0000000000000000] 
+    42 0000001D 488B3425[15000000]          mov rsi, [messageLen]
+    43 00000025 E8D6FFFFFF                  call print
+    44                                      
+    45 0000002A 48BF-                       mov rdi, toSort
+    45 0000002C [1D00000000000000] 
+    46 00000034 488B3425[3F000000]          mov rsi, [toSortLen]
+    47 0000003C E8BFFFFFFF                  call print
+    48                                  
+    49                                      ;actual sorting
+    50                                  
+    51                                      ;init
+    52 00000041 48B8-                       mov rax, toSort ;pointer to start of array
+    52 00000043 [1D00000000000000] 
+    53 0000004B 488B0C25[3F000000]          mov rcx, [toSortLen] ; lenght of the array into outer loop couter
+    54 00000053 488B1425[3F000000]          mov rdx, [toSortLen] ; lenght of the array into inner loop couter
+    55                                      ;mov rdi, 0 ; swap flag 
+    56                                  
+    57                                  innerloop:
+    58 0000005B 668B18                      mov bx,[rax] ;load using pointer
+    59 0000005E 668B7001                    mov si,[rax+1] ;load using pointer +1
+    60 00000062 6639F3                      cmp bx,si  ;compare them
+    61 00000065 7D07                        jge dontswap; if greater then other, then we dont swap them 
+    62                                      ;but other wise go ahead with swap
+    63                                      ;xchg bx,si
+    64 00000067 66895801                    mov [rax+1],bx 
+    65 0000006B 668930                      mov [rax], si 
+    66                                  
+    67                                  dontswap:
+    68 0000006E 48FFC0                      inc rax
+    69 00000071 48FFCA                      dec rdx  ; decrement inner counter
+    70 00000074 75E5                        jnz innerloop ; do inner loop iteration again 
+    71 00000076 48FFC9                      dec rcx ;decrement outer loop
+    72 00000079 740F                        jz _end ; go to end if we are done sorting other wise outer loop logic below makes it go again
+    73 0000007B 4889CA                      mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
+    74 0000007E 48B8-                       mov rax, toSort;reset pointer to start of array
+    74 00000080 [1D00000000000000] 
+    75 00000088 EBD1                        jmp innerloop
+    76                                  
+    77                                  
+    78                                  ;go back to the start 
     79                                  
-    80                                  
-    81                                  ;go back to the start 
-    82                                  
-    83                                  _end:
-    84 00000073 48BF-                       mov rdi, toSort
-    84 00000075 [2300000000000000] 
-    85 0000007D 488B3425[45000000]          mov rsi, [toSortLen]
-    86 00000085 E876FFFFFF                  call print
-    87                                  
-    88                                  
-    89                                  
-    90                                      			 
-    91                                  end:
-    92 0000008A B83C000000              	mov rax, sys_exit	
-    93 0000008F BF00000000                  mov rdi, success_exit	
-    94 00000094 0F05                        syscall
+    80                                  _end:
+    81 0000008A 48BF-                       mov rdi, toSort
+    81 0000008C [1D00000000000000] 
+    82 00000094 488B3425[3F000000]          mov rsi, [toSortLen]
+    83 0000009C E85FFFFFFF                  call print
+    84                                  
+    85                                  
+    86                                  
+    87                                      			 
+    88                                  end:
+    89 000000A1 B83C000000              	mov rax, sys_exit	
+    90 000000A6 BF00000000                  mov rdi, success_exit	
+    91 000000AB 0F05                        syscall
