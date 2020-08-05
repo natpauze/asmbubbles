@@ -3,7 +3,7 @@
 objfile=$1
 #assemble
 echo Assembling $1 
-nasm -f elf64 -l ${objfile/.asm/.lst} $1
+nasm -f elf64 -F dwarf -l ${objfile/.asm/.lst} $1
 
 #link 
 echo Linking ${objfile/.asm/} 

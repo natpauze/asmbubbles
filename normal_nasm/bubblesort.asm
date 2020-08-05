@@ -1,5 +1,5 @@
 
-;basically jsut for a warm up, done in parts, from here https://www.briansteffens.com/introduction-to-64-bit-assembly/01-hello-world/
+;a simple a naive bubble sort in x86_64
 
 ;define handy macros 
 %define sys_write 1
