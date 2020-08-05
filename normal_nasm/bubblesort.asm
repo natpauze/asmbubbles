@@ -16,15 +16,15 @@ section .data
 
     message db "Hello, world!", nl
 	;messageLen dw $-message
-    messageLen dw 14
+    messageLen dq 14
 
     testmessage db "test", nl
 	;messageLen dw $-message
-    testmessageLen dw 5
+    testmessageLen dq 5
 
     toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
 	;toSortLen dw $-toSort
-    toSortLen dw 34
+    toSortLen dq 34
 
 section .text	 
 
@@ -72,7 +72,7 @@ dontswap:
     dec rdx  ; decrement inner counter
     jnz innerloop ; do inner loop iteration again 
     dec rcx ;decrement outer loop
-    jz _end ; go to end if we are done sorting other wise outer loop makes it go again
+    jz _end ; go to end if we are done sorting other wise outer loop logic below makes it go again
     mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
     mov rax, toSort;reset pointer to start of array
     jmp innerloop

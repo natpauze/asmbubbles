@@ -17,18 +17,18 @@
     17 00000000 48656C6C6F2C20776F-         message db "Hello, world!", nl
     17 00000009 726C64210A         
     18                                  	;messageLen dw $-message
-    19 0000000E 0E00                        messageLen dw 14
+    19 0000000E 0E00000000000000            messageLen dq 14
     20                                  
-    21 00000010 746573740A                  testmessage db "test", nl
+    21 00000016 746573740A                  testmessage db "test", nl
     22                                  	;messageLen dw $-message
-    23 00000015 0500                        testmessageLen dw 5
+    23 0000001B 0500000000000000            testmessageLen dq 5
     24                                  
-    25 00000017 61697568776772616C-         toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
-    25 00000020 7069756572686A676F-
-    25 00000029 3B7061696466756761-
-    25 00000032 6F70696765720A     
+    25 00000023 61697568776772616C-         toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
+    25 0000002C 7069756572686A676F-
+    25 00000035 3B7061696466756761-
+    25 0000003E 6F70696765720A     
     26                                  	;toSortLen dw $-toSort
-    27 00000039 2200                        toSortLen dw 34
+    27 00000045 2200000000000000            toSortLen dq 34
     28                                  
     29                                  section .text	 
     30                                  
@@ -58,9 +58,9 @@
     53                                  
     54                                      ;init
     55 0000002A 48B8-                       mov rax, toSort ;pointer to start of array
-    55 0000002C [1700000000000000] 
-    56 00000034 488B0C25[39000000]          mov rcx, [toSortLen] ; lenght of the array into outer loop couter
-    57 0000003C 488B1425[39000000]          mov rdx, [toSortLen] ; lenght of the array into inner loop couter
+    55 0000002C [2300000000000000] 
+    56 00000034 488B0C25[45000000]          mov rcx, [toSortLen] ; lenght of the array into outer loop couter
+    57 0000003C 488B1425[45000000]          mov rdx, [toSortLen] ; lenght of the array into inner loop couter
     58                                      ;mov rdi, 0 ; swap flag 
     59                                  
     60                                  innerloop:
@@ -78,10 +78,10 @@
     72 0000005A 48FFCA                      dec rdx  ; decrement inner counter
     73 0000005D 75E5                        jnz innerloop ; do inner loop iteration again 
     74 0000005F 48FFC9                      dec rcx ;decrement outer loop
-    75 00000062 740F                        jz _end ; go to end if we are done sorting other wise outer loop makes it go again
+    75 00000062 740F                        jz _end ; go to end if we are done sorting other wise outer loop logic below makes it go again
     76 00000064 4889CA                      mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
-    77 00000067 48B8-                       mov rax, toSort;reset pointer 
-    77 00000069 [1700000000000000] 
+    77 00000067 48B8-                       mov rax, toSort;reset pointer to start of array
+    77 00000069 [2300000000000000] 
     78 00000071 EBD1                        jmp innerloop
     79                                  
     80                                  
@@ -89,8 +89,8 @@
     82                                  
     83                                  _end:
     84 00000073 48BF-                       mov rdi, toSort
-    84 00000075 [1700000000000000] 
-    85 0000007D 488B3425[39000000]          mov rsi, [toSortLen]
+    84 00000075 [2300000000000000] 
+    85 0000007D 488B3425[45000000]          mov rsi, [toSortLen]
     86 00000085 E876FFFFFF                  call print
     87                                  
     88                                  
