@@ -20,7 +20,7 @@ section .data
 
     toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
 	;toSortLen dw $-toSort
-    toSortLen   dq 33
+    toSortLen   dq 32
     toSortLen_nl dq 34
 
 section .text	 
@@ -53,6 +53,10 @@ _start:
     mov rax, toSort ;pointer to start of array
     mov rcx, [toSortLen] ; lenght of the array into outer loop couter
     mov rdx, [toSortLen] ; lenght of the array into inner loop couter
+
+    ;clear upper bits of rbx and rsi, makes debug view of registers clearer
+    xor rbx,rbx
+    xor rsi,rsi
     ;mov rdi, 0 ; swap flag 
 
 innerloop:

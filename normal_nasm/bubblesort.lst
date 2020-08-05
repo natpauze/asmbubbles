@@ -1,5 +1,5 @@
      1                                  
-     2                                  ;basically jsut for a warm up, done in parts, from here https://www.briansteffens.com/introduction-to-64-bit-assembly/01-hello-world/
+     2                                  ;a simple a naive bubble sort in x86_64
      3                                  
      4                                  ;define handy macros 
      5                                  %define sys_write 1
@@ -25,7 +25,7 @@
     21 0000002F 3B7061696466756761-
     21 00000038 6F70696765720A     
     22                                  	;toSortLen dw $-toSort
-    23 0000003F 2100000000000000            toSortLen   dq 33
+    23 0000003F 2000000000000000            toSortLen   dq 32
     24 00000047 2200000000000000            toSortLen_nl dq 34
     25                                  
     26                                  section .text	 
@@ -61,44 +61,48 @@
     53 00000043 [1D00000000000000] 
     54 0000004B 488B0C25[3F000000]          mov rcx, [toSortLen] ; lenght of the array into outer loop couter
     55 00000053 488B1425[3F000000]          mov rdx, [toSortLen] ; lenght of the array into inner loop couter
-    56                                      ;mov rdi, 0 ; swap flag 
-    57                                  
-    58                                  innerloop:
-    59 0000005B 8A18                        mov bl,[rax] ;load using pointer
-    60 0000005D 408A7001                    mov sil,[rax+1] ;load using pointer +1
-    61 00000061 4038DE                      cmp sil,bl  ;compare them
-    62 00000064 7F06                        jg dontswap; if greater then other, then we dont swap them 
-    63                                      ;but other wise go ahead with swap
-    64                                      ;xchg bx,si
-    65 00000066 885801                      mov [rax+1],bl 
-    66 00000069 408830                      mov [rax], sil 
-    67                                  
-    68                                  dontswap:
-    69 0000006C 48FFC0                      inc rax ;move pointer 
-    70 0000006F 48FFCA                      dec rdx  ; decrement inner counter
-    71 00000072 75E7                        jnz innerloop ; do inner loop iteration again 
-    72 00000074 EB14                        jmp _end ; exit early for debug
-    73                                  
-    74 00000076 48FFC9                      dec rcx ;decrement outer loop
-    75 00000079 740F                        jz _end ; go to end if we are done sorting other wise outer loop logic below makes it go again
-    76 0000007B 4889CA                      mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
-    77 0000007E 48B8-                       mov rax, toSort;reset pointer to start of array
-    77 00000080 [1D00000000000000] 
-    78 00000088 EBD1                        jmp innerloop
-    79                                  
-    80                                  
-    81                                  ;go back to the start 
-    82                                  
-    83                                  _end:
-    84 0000008A 48BF-                       mov rdi, toSort
-    84 0000008C [1D00000000000000] 
-    85 00000094 488B3425[47000000]          mov rsi, [toSortLen_nl]
-    86 0000009C E85FFFFFFF                  call print
-    87                                  
-    88                                  
-    89                                  
-    90                                      			 
-    91                                  end:
-    92 000000A1 B83C000000              	mov rax, sys_exit	
-    93 000000A6 BF00000000                  mov rdi, success_exit	
-    94 000000AB 0F05                        syscall
+    56                                  
+    57                                      ;clear upper bits of rbx and rsi, makes debug view of registers clearer
+    58 0000005B 4831DB                      xor rbx,rbx
+    59 0000005E 4831F6                      xor rsi,rsi
+    60                                      ;mov rdi, 0 ; swap flag 
+    61                                  
+    62                                  innerloop:
+    63 00000061 8A18                        mov bl,[rax] ;load using pointer
+    64 00000063 408A7001                    mov sil,[rax+1] ;load using pointer +1
+    65 00000067 4038DE                      cmp sil,bl  ;compare them
+    66 0000006A 7F06                        jg dontswap; if greater then other, then we dont swap them 
+    67                                      ;but other wise go ahead with swap
+    68                                      ;xchg bx,si
+    69 0000006C 885801                      mov [rax+1],bl 
+    70 0000006F 408830                      mov [rax], sil 
+    71                                  
+    72                                  dontswap:
+    73 00000072 48FFC0                      inc rax ;move pointer 
+    74 00000075 48FFCA                      dec rdx  ; decrement inner counter
+    75 00000078 75E7                        jnz innerloop ; do inner loop iteration again 
+    76 0000007A EB14                        jmp _end ; exit early for debug
+    77                                  
+    78 0000007C 48FFC9                      dec rcx ;decrement outer loop
+    79 0000007F 740F                        jz _end ; go to end if we are done sorting other wise outer loop logic below makes it go again
+    80 00000081 4889CA                      mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
+    81 00000084 48B8-                       mov rax, toSort;reset pointer to start of array
+    81 00000086 [1D00000000000000] 
+    82 0000008E EBD1                        jmp innerloop
+    83                                  
+    84                                  
+    85                                  ;go back to the start 
+    86                                  
+    87                                  _end:
+    88 00000090 48BF-                       mov rdi, toSort
+    88 00000092 [1D00000000000000] 
+    89 0000009A 488B3425[47000000]          mov rsi, [toSortLen_nl]
+    90 000000A2 E859FFFFFF                  call print
+    91                                  
+    92                                  
+    93                                  
+    94                                      			 
+    95                                  end:
+    96 000000A7 B83C000000              	mov rax, sys_exit	
+    97 000000AC BF00000000                  mov rdi, success_exit	
+    98 000000B1 0F05                        syscall
