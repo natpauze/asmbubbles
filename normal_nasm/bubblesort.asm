@@ -15,12 +15,21 @@
 section .data
 
     message db "Hello, world!", nl
-	messageLen db $-message
+	;messageLen dw $-message
+    messageLen dw 14
+
+    testmessage db "test", nl
+	;messageLen dw $-message
+    testmessageLen dw 5
+
+    toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
+	;toSortLen dw $-toSort
+    toSortLen dw 34
 
 section .text	 
 
 
-; pass pointer in rdi and len in rsi
+; Printing function jsut for fun, pass pointer in rdi and len in rsi
 print:
     mov rdx, rsi
     mov rsi, rdi 
@@ -32,9 +41,26 @@ ret
 
 global _start
 _start:
+    ;ok, why on earth does this first print or the second not show up? 
+    ;maybe has to do with output bufffering, and i keep writing over it?
     mov rdi, message
     mov rsi, [messageLen]
     call print
+
+    mov rdi, testmessage
+    mov rsi, [testmessageLen]
+    call print
+
+    ;actual sorting
+
+
+
+
+    mov rdi, toSort
+    mov rsi, [toSortLen]
+    call print
+
+
     			 
 end:
 	mov rax, sys_exit	
