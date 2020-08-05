@@ -1,0 +1,44 @@
+     1                                  
+     2                                  ;basically jsut for a warm up, done in parts, from here https://www.briansteffens.com/introduction-to-64-bit-assembly/01-hello-world/
+     3                                  
+     4                                  ;define handy macros 
+     5                                  %define sys_write 1
+     6                                  %define stdout 1
+     7                                  
+     8                                  %define sys_exit 60
+     9                                  %define success_exit 0
+    10                                  
+    11                                  %define nl 10
+    12                                  
+    13                                  
+    14                                  
+    15                                  section .data
+    16                                  
+    17 00000000 48656C6C6F2C20776F-         message db "Hello, world!", nl
+    17 00000009 726C64210A         
+    18 0000000E 0E                      	messageLen db $-message
+    19                                  
+    20                                  section .text	 
+    21                                  
+    22                                  
+    23                                  ; pass pointer in rdi and len in rsi
+    24                                  print:
+    25 00000000 4889F2                      mov rdx, rsi
+    26 00000003 4889FE                      mov rsi, rdi 
+    27 00000006 B801000000                  mov rax, sys_write	 
+    28 0000000B BF01000000                  mov rdi, stdout		
+    29 00000010 0F05                        syscall
+    30 00000012 C3                      ret
+    31                                  
+    32                                  
+    33                                  global _start
+    34                                  _start:
+    35 00000013 48BF-                       mov rdi, message
+    35 00000015 [0000000000000000] 
+    36 0000001D 488B3425[0E000000]          mov rsi, [messageLen]
+    37 00000025 E8D6FFFFFF                  call print
+    38                                      			 
+    39                                  end:
+    40 0000002A B83C000000              	mov rax, sys_exit	
+    41 0000002F BF00000000                  mov rdi, success_exit	
+    42 00000034 0F05                        syscall
