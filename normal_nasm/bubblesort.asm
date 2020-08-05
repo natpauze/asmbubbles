@@ -20,7 +20,8 @@ section .data
 
     toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
 	;toSortLen dw $-toSort
-    toSortLen dq 34
+    toSortLen   dq 33
+    toSortLen_nl dq 34
 
 section .text	 
 
@@ -43,7 +44,7 @@ _start:
     call print
     
     mov rdi, toSort
-    mov rsi, [toSortLen]
+    mov rsi, [toSortLen_nl]
     call print
 
     ;actual sorting
@@ -55,19 +56,21 @@ _start:
     ;mov rdi, 0 ; swap flag 
 
 innerloop:
-    mov bx,[rax] ;load using pointer
-    mov si,[rax+1] ;load using pointer +1
-    cmp bx,si  ;compare them
-    jge dontswap; if greater then other, then we dont swap them 
+    mov bl,[rax] ;load using pointer
+    mov sil,[rax+1] ;load using pointer +1
+    cmp sil,bl  ;compare them
+    jg dontswap; if greater then other, then we dont swap them 
     ;but other wise go ahead with swap
     ;xchg bx,si
-    mov [rax+1],bx 
-    mov [rax], si 
+    mov [rax+1],bl 
+    mov [rax], sil 
 
 dontswap:
-    inc rax
+    inc rax ;move pointer 
     dec rdx  ; decrement inner counter
     jnz innerloop ; do inner loop iteration again 
+    jmp _end ; exit early for debug
+
     dec rcx ;decrement outer loop
     jz _end ; go to end if we are done sorting other wise outer loop logic below makes it go again
     mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
@@ -79,7 +82,7 @@ dontswap:
 
 _end:
     mov rdi, toSort
-    mov rsi, [toSortLen]
+    mov rsi, [toSortLen_nl]
     call print
 
 
