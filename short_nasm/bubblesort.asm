@@ -27,24 +27,24 @@ _start:
 
 _outerloop:
     ;init
-    mov rax, toSort ;pointer to start of array
+    mov eax, toSort ;pointer to start of array
     mov cx, toSortLen ; lenght of the array 
     mov rdi, 1 ;swap flag
     
 
 innerloop:
-    mov bl,[rax] ;load using pointer
-    mov sil,[rax+1] ;load using pointer +1
+    mov bl,[eax] ;load using pointer
+    mov sil,[eax+1] ;load using pointer +1
     cmp sil,bl  ;compare them
     jge dontswap; if greater then other, then we dont swap them 
     ;but other wise go ahead with swap
     ;xchg bx,si
-    mov [rax+1],bl 
-    mov [rax], sil
+    mov [eax+1],bl 
+    mov [eax], sil
     xor rdi, rdi
 
 dontswap:
-    inc rax ;move pointer 
+    inc eax ;move pointer 
     dec cx  ; decrement inner counter
     jnz innerloop ; do inner loop iteration again 
     ;jmp _end ; exit early for debug
@@ -56,7 +56,7 @@ dontswap:
 _end:
     mov rdx, toSortLen_nl
     mov rsi, toSort
-    mov rax, sys_write	 
+    mov eax, sys_write	 
     mov rdi, stdout		
     syscall
 
