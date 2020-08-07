@@ -28,7 +28,7 @@ _start:
 _outerloop:
     ;init
     mov rax, toSort ;pointer to start of array
-    mov rcx, toSortLen ; lenght of the array 
+    mov cx, toSortLen ; lenght of the array 
     mov rdi, 1 ;swap flag
     
 
@@ -45,7 +45,7 @@ innerloop:
 
 dontswap:
     inc rax ;move pointer 
-    dec rcx  ; decrement inner counter
+    dec cx  ; decrement inner counter
     jnz innerloop ; do inner loop iteration again 
     ;jmp _end ; exit early for debug
 

@@ -1,0 +1,33 @@
+
+bubblesort:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000004000b0 <.text>:
+  4000b0:	48 b8 10 01 60 00 00 	movabs $0x600110,%rax
+  4000b7:	00 00 00 
+  4000ba:	66 b9 20 00          	mov    $0x20,%cx
+  4000be:	bf 01 00 00 00       	mov    $0x1,%edi
+  4000c3:	8a 18                	mov    (%rax),%bl
+  4000c5:	40 8a 70 01          	mov    0x1(%rax),%sil
+  4000c9:	40 38 de             	cmp    %bl,%sil
+  4000cc:	7d 09                	jge    0x4000d7
+  4000ce:	88 58 01             	mov    %bl,0x1(%rax)
+  4000d1:	40 88 30             	mov    %sil,(%rax)
+  4000d4:	48 31 ff             	xor    %rdi,%rdi
+  4000d7:	48 ff c0             	inc    %rax
+  4000da:	66 ff c9             	dec    %cx
+  4000dd:	75 e4                	jne    0x4000c3
+  4000df:	48 21 ff             	and    %rdi,%rdi
+  4000e2:	75 02                	jne    0x4000e6
+  4000e4:	eb ca                	jmp    0x4000b0
+  4000e6:	ba 22 00 00 00       	mov    $0x22,%edx
+  4000eb:	48 be 10 01 60 00 00 	movabs $0x600110,%rsi
+  4000f2:	00 00 00 
+  4000f5:	b8 01 00 00 00       	mov    $0x1,%eax
+  4000fa:	bf 01 00 00 00       	mov    $0x1,%edi
+  4000ff:	0f 05                	syscall 
+  400101:	b8 3c 00 00 00       	mov    $0x3c,%eax
+  400106:	bf 00 00 00 00       	mov    $0x0,%edi
+  40010b:	0f 05                	syscall 
