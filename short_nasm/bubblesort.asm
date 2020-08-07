@@ -29,7 +29,7 @@ _outerloop:
     ;init
     mov eax, toSort ;pointer to start of array
     mov cx, toSortLen ; lenght of the array 
-    mov dil, 1 ;swap flag
+    inc dil;swap flag
     
 
 innerloop:
@@ -54,7 +54,7 @@ dontswap:
     jmp _outerloop ;go back to the start 
 
 _end:
-    mov rdx, toSortLen_nl
+    mov dl, toSortLen_nl
     mov rsi, toSort
     mov eax, sys_write	 
     mov rdi, stdout		
