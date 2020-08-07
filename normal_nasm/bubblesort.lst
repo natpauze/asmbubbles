@@ -81,28 +81,30 @@
     73 00000072 48FFC0                      inc rax ;move pointer 
     74 00000075 48FFCA                      dec rdx  ; decrement inner counter
     75 00000078 75E7                        jnz innerloop ; do inner loop iteration again 
-    76 0000007A EB14                        jmp _end ; exit early for debug
+    76                                      ;jmp _end ; exit early for debug
     77                                  
-    78 0000007C 48FFC9                      dec rcx ;decrement outer loop
-    79 0000007F 740F                        jz _end ; go to end if we are done sorting other wise outer loop logic below makes it go again
-    80 00000081 4889CA                      mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
-    81 00000084 48B8-                       mov rax, toSort;reset pointer to start of array
-    81 00000086 [1D00000000000000] 
-    82 0000008E EBD1                        jmp innerloop
-    83                                  
-    84                                  
-    85                                  ;go back to the start 
+    78 0000007A 48FFC9                      dec rcx ;decrement outer loop
+    79 0000007D 7414                        jz _end ; go to end if we are done sorting (outer loop = 0) other wise outer loop logic below makes it go again
+    80 0000007F 488B1425[3F000000]          mov rdx, [toSortLen]
+    81                                      ;mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
+    82                                      ;dec rdx
+    83 00000087 48B8-                       mov rax, toSort;reset pointer to start of array
+    83 00000089 [1D00000000000000] 
+    84 00000091 EBCE                        jmp innerloop
+    85                                  
     86                                  
-    87                                  _end:
-    88 00000090 48BF-                       mov rdi, toSort
-    88 00000092 [1D00000000000000] 
-    89 0000009A 488B3425[47000000]          mov rsi, [toSortLen_nl]
-    90 000000A2 E859FFFFFF                  call print
-    91                                  
-    92                                  
+    87                                  ;go back to the start 
+    88                                  
+    89                                  _end:
+    90 00000093 48BF-                       mov rdi, toSort
+    90 00000095 [1D00000000000000] 
+    91 0000009D 488B3425[47000000]          mov rsi, [toSortLen_nl]
+    92 000000A5 E856FFFFFF                  call print
     93                                  
-    94                                      			 
-    95                                  end:
-    96 000000A7 B83C000000              	mov rax, sys_exit	
-    97 000000AC BF00000000                  mov rdi, success_exit	
-    98 000000B1 0F05                        syscall
+    94                                  
+    95                                  
+    96                                      			 
+    97                                  end:
+    98 000000AA B83C000000              	mov rax, sys_exit	
+    99 000000AF BF00000000                  mov rdi, success_exit	
+   100 000000B4 0F05                        syscall

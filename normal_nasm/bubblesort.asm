@@ -73,11 +73,13 @@ dontswap:
     inc rax ;move pointer 
     dec rdx  ; decrement inner counter
     jnz innerloop ; do inner loop iteration again 
-    jmp _end ; exit early for debug
+    ;jmp _end ; exit early for debug
 
     dec rcx ;decrement outer loop
-    jz _end ; go to end if we are done sorting other wise outer loop logic below makes it go again
-    mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
+    jz _end ; go to end if we are done sorting (outer loop = 0) other wise outer loop logic below makes it go again
+    mov rdx,[toSortLen]
+    ;mov rdx,rcx ;set inner loop back to what it was -1 (-1 allready done)
+    ;dec rdx
     mov rax, toSort;reset pointer to start of array
     jmp innerloop
 
