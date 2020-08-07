@@ -49,7 +49,7 @@ dontswap:
     jnz innerloop ; do inner loop iteration again 
     ;jmp _end ; exit early for debug
 
-    cmp rdi, 0 ;or or and or test is smaller then cmp
+    and rdi, rdi ;or or and or test is smaller then cmp
     jnz _end ; go to end if we are done sorting (flag didnt get set)
     jmp _outerloop ;go back to the start 
 
