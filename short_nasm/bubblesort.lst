@@ -1,0 +1,70 @@
+     1                                  
+     2                                  ;a simple a naive bubble sort in x86_64
+     3                                  
+     4                                  ;define handy macros 
+     5                                  %define sys_write 1
+     6                                  %define stdout 1
+     7                                  
+     8                                  %define sys_exit 60
+     9                                  %define success_exit 0
+    10                                  
+    11                                  %define nl 10
+    12                                  
+    13                                  %define toSortLen 32
+    14                                  %define toSortLen_nl 34
+    15                                  
+    16                                  
+    17                                  section .data
+    18 00000000 61697568776772616C-         toSort db "aiuhwgralpiuerhjgo",59,"paidfugaopiger", nl
+    18 00000009 7069756572686A676F-
+    18 00000012 3B7061696466756761-
+    18 0000001B 6F70696765720A     
+    19                                  
+    20                                  section .text	 
+    21                                  
+    22                                  
+    23                                  
+    24                                  global _start
+    25                                  _start:
+    26                                      ;actual sorting
+    27                                  
+    28                                  _outerloop:
+    29                                      ;init
+    30 00000000 48B8-                       mov rax, toSort ;pointer to start of array
+    30 00000002 [0000000000000000] 
+    31 0000000A B920000000                  mov rcx, toSortLen ; lenght of the array 
+    32 0000000F BF01000000                  mov rdi, 1 ;swap flag
+    33                                      
+    34                                  
+    35                                  innerloop:
+    36 00000014 8A18                        mov bl,[rax] ;load using pointer
+    37 00000016 408A7001                    mov sil,[rax+1] ;load using pointer +1
+    38 0000001A 4038DE                      cmp sil,bl  ;compare them
+    39 0000001D 7D0B                        jge dontswap; if greater then other, then we dont swap them 
+    40                                      ;but other wise go ahead with swap
+    41                                      ;xchg bx,si
+    42 0000001F 885801                      mov [rax+1],bl 
+    43 00000022 408830                      mov [rax], sil
+    44 00000025 BF00000000                  mov rdi, 0
+    45                                  
+    46                                  dontswap:
+    47 0000002A 48FFC0                      inc rax ;move pointer 
+    48 0000002D 48FFC9                      dec rcx  ; decrement inner counter
+    49 00000030 75E2                        jnz innerloop ; do inner loop iteration again 
+    50                                      ;jmp _end ; exit early for debug
+    51                                  
+    52 00000032 4883FF00                    cmp rdi, 0 ;or or and or test is smaller then cmp
+    53 00000036 7502                        jnz _end ; go to end if we are done sorting (flag didnt get set)
+    54 00000038 EBC6                        jmp _outerloop ;go back to the start 
+    55                                  
+    56                                  _end:
+    57 0000003A BA22000000                  mov rdx, toSortLen_nl
+    58 0000003F 48BE-                       mov rsi, toSort
+    58 00000041 [0000000000000000] 
+    59 00000049 B801000000                  mov rax, sys_write	 
+    60 0000004E BF01000000                  mov rdi, stdout		
+    61 00000053 0F05                        syscall
+    62                                  
+    63 00000055 B83C000000              	mov rax, sys_exit	
+    64 0000005A BF00000000                  mov rdi, success_exit	
+    65 0000005F 0F05                        syscall
