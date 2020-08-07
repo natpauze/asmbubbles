@@ -41,7 +41,7 @@ innerloop:
     ;xchg bx,si
     mov [rax+1],bl 
     mov [rax], sil
-    mov rdi, 0
+    xor rdi, rdi
 
 dontswap:
     inc rax ;move pointer 
