@@ -29,7 +29,7 @@ _outerloop:
     ;init
     mov eax, toSort ;pointer to start of array
     mov cx, toSortLen ; lenght of the array 
-    mov rdi, 1 ;swap flag
+    mov dil, 1 ;swap flag
     
 
 innerloop:
@@ -41,7 +41,7 @@ innerloop:
     ;xchg bx,si
     mov [eax+1],bl 
     mov [eax], sil
-    xor rdi, rdi
+    xor dil, dil
 
 dontswap:
     inc eax ;move pointer 
@@ -49,7 +49,7 @@ dontswap:
     jnz innerloop ; do inner loop iteration again 
     ;jmp _end ; exit early for debug
 
-    and rdi, rdi ;or or and or test is smaller then cmp
+    and dil, dil ;or or and or test is smaller then cmp
     jnz _end ; go to end if we are done sorting (flag didnt get set)
     jmp _outerloop ;go back to the start 
 
@@ -60,6 +60,6 @@ _end:
     mov rdi, stdout		
     syscall
 
-	mov rax, sys_exit	
+	mov eax, sys_exit	
     mov rdi, success_exit	
     syscall
