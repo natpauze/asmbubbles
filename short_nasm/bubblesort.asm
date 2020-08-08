@@ -64,11 +64,12 @@ section .text
 
 global _start
 _start:
-    ;first call mprotect to get write for the string
+    ;first call mprotect to get write for the string (man mprotect for usage)
     mov rax, 10 ;its call 10
     mov rdi, toSort;start address
     mov rsi, toSortLen_nl;lenght
-    mov rdx, 0b00001110;permisions flags
+    ;then found defintitions of flags in linux/include/uapi/asm-generic/mman-common.h
+    mov rdx, 0b0000111;permisions flags (ive dug )
     syscall
 
 
