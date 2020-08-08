@@ -13,6 +13,9 @@
 %define toSortLen 32
 %define toSortLen_nl 34
 
+;ELF header taken and modified from here:
+;https://www.linuxnasm.be/examples/terminal-based/48-hello-world-elf64-header
+
 
 bits 64
 
