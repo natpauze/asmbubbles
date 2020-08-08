@@ -38,7 +38,7 @@ ehdr:
     dw 0                    ;e_shentsize
     dw 0                    ;e_shnum
     dw 0                    ;e_shstrndx
-    
+
 ehdrsize equ $ - ehdr
 
 ;64-bit ELF program header
@@ -64,7 +64,13 @@ section .text
 
 global _start
 _start:
-    ;actual sorting
+    ;first call mprotect to get write for the string
+    mov rax, 10 ;its call 10
+    mov rdi, toSort;start address
+    mov rsi, toSortLen_nl;lenght
+    mov rdx, 0b00001110;permisions flags
+    syscall
+
 
 _outerloop:
     ;init
