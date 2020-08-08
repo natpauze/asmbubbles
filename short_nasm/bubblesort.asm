@@ -20,7 +20,6 @@ section .data
 section .text	 
 
 
-
 global _start
 _start:
     ;actual sorting
@@ -28,23 +27,35 @@ _start:
 _outerloop:
     ;init
     mov eax, toSort ;pointer to start of array
+    mov r9d,eax
+    inc r9d
     mov cx, toSortLen ; lenght of the array 
     inc dil;swap flag
     
 
 innerloop:
     mov bl,[eax] ;load using pointer
-    mov sil,[eax+1] ;load using pointer +1
+    mov sil,[r9d] ;load using pointer +1
+    mov r10b, sil
     cmp sil,bl  ;compare them
-    jge dontswap; if greater then other, then we dont swap them 
+
+    ;conditional swapping, has to do it on 16 bit reg
+    cmovl si,bx 
+    cmovl bx, r10w
+    cmovl di,r11w ; it should be inititlized to 0 
+
+    ;xor dil, dil
+
+    ;jge dontswap; if greater then other, then we dont swap them 
     ;but other wise go ahead with swap
     ;xchg bx,si
-    mov [eax+1],bl 
-    mov [eax], sil
-    xor dil, dil
+    ;mov [eax+1],bl 
+    ;mov [eax], sil
+    
 
 dontswap:
     inc eax ;move pointer 
+    inc r9d
     dec cx  ; decrement inner counter
     jnz innerloop ; do inner loop iteration again 
     ;jmp _end ; exit early for debug
